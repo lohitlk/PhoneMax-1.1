@@ -1,4 +1,4 @@
-﻿@model PhoneMax_1._1.Models.Registration 
+﻿@model PhoneMax_1._1.Models.Registration
 
 @{
     ViewData["Title"] = "login";
@@ -18,23 +18,25 @@
     <br>
     <br>
     <div class="cont">
-        <div id="signin" class="form sign-in">
-            <h2>Welcome</h2>
+        <form>
+            <div id="signin" class="form sign-in">
+                <h2>Welcome</h2>
 
-            <label>
-                <span>Email</span>
-                <input type="email" class="form-control" asp-for="LoginEmail" />
-            </label>
-            <label>
-                <span>Password</span>
-                <input type="password" class="form-control" asp-for="LoginPassword"/>
-            </label>
-            <p class="forgot-pass">Forgot password?</p>
+                <label>
+                    <span>Email</span>
+                    <input type="email" class="form-control" asp-for="LoginEmail" />
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" class="form-control" asp-for="LoginPassword" />
+                </label>
+                <p class="forgot-pass">Forgot password?</p>
 
-            <button type="button" class="submit login">Sign In</button>
+                <button type="submit" asp-action="Login" class="submit login">Sign In</button>
 
 
-        </div>
+            </div>
+        </form>
         <div class="sub-cont">
             <div class="img">
                 <div class="img__text m--up">
@@ -72,19 +74,7 @@
                             <input type="password" class="form-control" asp-for="Password" />
                         </label>
                     </div>
-
-                    <input type="submit" value="SignUp" class="submit img__btn">
-                    <script>
-
-                        //if (result == "Success") {
-                        //    alert("signup sucessfull")
-                        //}
-                        //else {
-                        //    alert("enter valid details")
-                        //}
-
-                    </script>
-                    @*<h1>@Registration.Name</h1>*@
+                    <input type="submit" asp-action="LoginSignupPage" value="SignUp" class="submit img__btn">
                 </form>
             </div>
         </div>
@@ -97,12 +87,19 @@
             alert("Signup sucessfull");
         }
 
-
         document.querySelector('.img__btn').addEventListener('click', function() {
             document.querySelector('.cont').classList.toggle('s--signup');
         });
-        var res;
-        console.log(Registration);
+
+
+       var query = @ViewBag.Query
+             console.log(query);
+         if (query != 1) {
+             alert("Please enter valid email and password");
+         }
+         else {
+             alert("login sucessfull redirecting to home page");
+         }
     </script>
 </body>
 </html>

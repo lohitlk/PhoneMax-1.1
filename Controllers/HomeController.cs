@@ -33,11 +33,11 @@ namespace PhoneMax_1._1.Controllers
         [HttpPost]
         public IActionResult LoginSignupPage(Registration registration)
         {
-            Registration register = new Registration();
+
             string connectionString = Configuration["ConnectionStrings:MyConnection"];
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"Insert Into Register (Name, Email, Password) Values ('{registration.Name}', '{registration.Email}','{registration.Password}')";
+                string sql = $"Insert Into Registration (Name, Email, Password) Values ('{registration.Name}', '{registration.Email}','{registration.Password}')";
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -49,31 +49,44 @@ namespace PhoneMax_1._1.Controllers
                 }
             }
 
-
             ViewBag.Result = 1;
-       
+            return View(); 
+        }
+
+
+        public IActionResult Login(Registration registration)
+        {
+
+            var check = 1;
+            string connectionString = Configuration["ConnectionStrings:MyConnection"];
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                DataTable dataTable = new DataTable();
-                string sql1 = $"Select * From Register";
-                SqlCommand command = new SqlCommand(sql1, connection);
-
-                connection.Open();
-
-                using (SqlDataReader dataReader = command.ExecuteReader())
+                string sql = $"Select email,password From Register where email = '{registration.LoginEmail}' and password = '{registration.LoginPassword}'";
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    while (dataReader.Read())
+                    command.CommandType = CommandType.Text;
+
+                    connection.Open();
+                    var validate = command.ExecuteScalar();
+                    if (validate != null)
                     {
-                        register.LoginEmail = Convert.ToString(dataReader["email"]);
-                        register.LoginPassword = Convert.ToString(dataReader["password"]);
+                        check = 0;
+
                     }
+                    connection.Close();
                 }
 
-                connection.Close();
             }
-            return View();
+            if (check == 0)
+            {
+                ViewBag.Query = 1;
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("LoginSignupPage");
+
         }
-            public IActionResult Android()
+        public IActionResult Android()
         {
             return View();
         }
